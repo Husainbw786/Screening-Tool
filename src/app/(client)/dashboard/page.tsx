@@ -20,9 +20,9 @@ function Interviews() {
   function InterviewsLoader() {
     return (
       <div className="flex flex-row">
-        {[...Array(3)].map((_, i) => (
+        {['loader1', 'loader2', 'loader3'].map((id) => (
           <div
-            key={i}
+            key={id}
             className="h-60 w-56 ml-1 mr-3 mt-3 flex-none animate-pulse rounded-xl bg-gray-300"
           />
         ))}

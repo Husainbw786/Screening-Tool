@@ -114,15 +114,18 @@ function CameraTile() {
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
   });
 
+
+
   return (
     <div
-      onMouseDown={handleMouseDown}
+      className="w-80 h-50 border-2 border-black rounded-lg overflow-hidden shadow-lg bg-white"
       style={{
         position: "fixed",
         top: position.y,
@@ -130,9 +133,14 @@ function CameraTile() {
         zIndex: 9999,
         cursor: "move",
       }}
-      className="w-80 h-50 border-2 border-black rounded-lg overflow-hidden shadow-lg bg-white"
+      onMouseDown={handleMouseDown}
     >
-      <video ref={videoRef} autoPlay muted className="w-full h-full object-cover" />
+      <video
+        className="w-full h-full object-cover"
+        ref={videoRef}
+        autoPlay
+        muted
+      />
     </div>
   );
 }
@@ -166,7 +174,7 @@ function InterviewInterface({ params }: Props) {
     };
 
     fetchinterview();
-  }, []);
+  }, [getInterviewById, params.interviewId]);
 
   return (
     <div>
