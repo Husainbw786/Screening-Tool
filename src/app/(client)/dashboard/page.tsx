@@ -13,9 +13,16 @@ function Interviews() {
   const { interviews, interviewsLoading } = useInterviews();
   const { organization } = useOrganization();
   const { user } = useUser();
-  const [userRole, setUserRole] = useState<string | null>(null);
   const [userOrganizationId, setUserOrganizationId] = useState<string | null>(null);
   const [clientData, setClientData] = useState<any>(null);
+  
+  // Get user role from Clerk organization membership
+  const userRole = user?.organizationMemberships?.[0]?.role || null;
+  
+  // Debug logging
+  console.log("User organization memberships:", user?.organizationMemberships);
+  console.log("User role:", userRole);
+  console.log("Organization:", organization);
 
   function InterviewsLoader() {
     return (
@@ -40,10 +47,9 @@ function Interviews() {
             organization?.id ?? null
           );
           if (data) {
-            setUserRole(data.role);
             setUserOrganizationId(data.organization_id);
             setClientData(data);
-            console.log("Fetched user role:", data.role);
+            console.log("Fetched user role from Clerk:", userRole);
           }
         }
       } catch (error) {
@@ -51,18 +57,24 @@ function Interviews() {
       }
     };
     fetchClientData();
-  }, [user, organization]);
+  }, [user, organization, userRole]);
 
   const canCreateInterview = () => {
-    if (!userRole || !userOrganizationId) {
-      return false;
+    // If user is not part of an organization, allow them to create interviews
+    if (!userRole && user) {
+      return true;
     }
   
-    return ["Admin", "Member"].includes(userRole);
+    // If user is part of an organization, check their role
+    if (userRole) {
+      return ["org:admin", "org:member"].includes(userRole);
+    }
+  
+    return false;
   };
 
   const shouldShowAccessWarning = () => {
-    return userRole === "Member" && !userOrganizationId;
+    return userRole === "org:member" && !userOrganizationId;
   };
 
   return (
