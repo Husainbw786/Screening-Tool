@@ -197,7 +197,7 @@ export function CandidateCard({
             candidate?.email &&
               window.open(
                 `https://mail.google.com/mail/?view=cm&fs=1&to=${candidate.email}`,
-                "_blank"
+                "_blank",
               );
           }}
           className={`flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg text-xs flex items-center justify-center gap-2 transition

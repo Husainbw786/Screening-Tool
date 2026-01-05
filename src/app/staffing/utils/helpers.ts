@@ -1,5 +1,5 @@
 export const normalizeSkills = (
-  skills: string | string[] | undefined
+  skills: string | string[] | undefined,
 ): string[] => {
   if (!skills) return [];
   try {
@@ -11,17 +11,23 @@ export const normalizeSkills = (
 };
 
 export const normalizeTotalExperience = (
-  value: string | number | undefined
+  value: string | number | undefined,
 ): number | undefined => {
-  if (value === undefined || value === null) return;
+  if (value === undefined || value === null) {
+    return;
+  }
+
   try {
     if (typeof value === "string") {
-      if (value.trim() === "") return;
+      if (value.trim() === "") {
+        return;
+      }
     }
 
     if (typeof value === "number" && !Number.isNaN(value)) return value;
 
     const num = Number(value);
+
     return Number.isNaN(num) ? undefined : num;
   } catch (err) {
     return;

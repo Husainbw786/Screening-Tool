@@ -10,7 +10,7 @@ export default function CandidateDetailRoute() {
   const { resultsData } = useStaffing();
 
   const candidate = resultsData?.candidates.find(
-    (c: Candidate) => (c.id || c.filename).toString() === params.id
+    (c: Candidate) => (c.id || c.filename).toString() === params.id,
   );
 
   if (!candidate) {

@@ -12,12 +12,12 @@ interface StaffingContextType {
 }
 
 const StaffingContext = createContext<StaffingContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function StaffingProvider({ children }: { children: React.ReactNode }) {
   const [resultsData, setResultsDataState] = useState<CandidateResponse | null>(
-    null
+    null,
   );
   const [jobDescription, setJobDescriptionState] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
