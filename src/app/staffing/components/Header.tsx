@@ -1,0 +1,51 @@
+export default function Header() {
+  return (
+    <header className="bg-white border-b border-gray-200 px-6 py-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+            <span className="text-white text-base font-bold">A</span>
+          </div>
+          <div>
+            <h1 className="text-sm font-bold text-gray-900">
+              A&A SEARCH STAFFING
+            </h1>
+            <p className="text-[8px] text-blue-500 font-medium">
+              RECRUITING AND CONSULTING SOLUTIONS
+            </p>
+          </div>
+        </div>
+
+        <button
+          className="p-[6px] hover:bg-gray-100 rounded-lg transition-colors"
+          aria-label="Settings"
+          title="Settings"
+        >
+          <svg
+            className="w-5 h-5 text-gray-600"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke="#121822"
+              strokeWidth="1.5"
+              strokeMiterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z"
+            />
+            <path
+              stroke="#121822"
+              strokeWidth="1.5"
+              strokeMiterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M1.66663 10.7333V9.26667C1.66663 8.4 2.37496 7.68333 3.24996 7.68333C4.75829 7.68333 5.37496 6.61667 4.61663 5.30833C4.18329 4.55833 4.44163 3.58333 5.19996 3.15L6.64163 2.325C7.29996 1.93333 8.14996 2.16667 8.54163 2.825L8.63329 2.98333C9.38329 4.29167 10.6166 4.29167 11.375 2.98333L11.4666 2.825C11.8583 2.16667 12.7083 1.93333 13.3666 2.325L14.8083 3.15C15.5666 3.58333 15.825 4.55833 15.3916 5.30833C14.6333 6.61667 15.25 7.68333 16.7583 7.68333C17.625 7.68333 18.3416 8.39167 18.3416 9.26667V10.7333C18.3416 11.6 17.6333 12.3167 16.7583 12.3167C15.25 12.3167 14.6333 13.3833 15.3916 14.6917C15.825 15.45 15.5666 16.4167 14.8083 16.85L13.3666 17.675C12.7083 18.0667 11.8583 17.8333 11.4666 17.175L11.375 17.0167C10.625 15.7083 9.39163 15.7083 8.63329 17.0167L8.54163 17.175C8.14996 17.8333 7.29996 18.0667 6.64163 17.675L5.19996 16.85C4.44163 16.4167 4.18329 15.4417 4.61663 14.6917C5.37496 13.3833 4.75829 12.3167 3.24996 12.3167C2.37496 12.3167 1.66663 11.6 1.66663 10.7333Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
+  );
+}
