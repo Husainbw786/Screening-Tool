@@ -1,20 +1,48 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { InterviewerService } from "@/services/interviewers.service";
 import axios from "axios";
 import { Plus, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useInterviewers } from "@/contexts/interviewers.context";
+import { toast } from "sonner";
 
 function CreateInterviewerButton() {
   const [isLoading, setIsLoading] = useState(false);
+  const { setInterviewers } = useInterviewers();
 
   const createInterviewers = async () => {
-    setIsLoading(true);
-    const response = await axios.get("/api/create-interviewer", {});
-    console.log(response);
-    setIsLoading(false);
-    InterviewerService.getAllInterviewers();
+    try {
+      setIsLoading(true);
+      const response = await axios.get("/api/create-interviewer");
+      
+      if (response.status === 200) {
+        toast.success("Successfully created default interviewers (Lisa & Bob)!", {
+          position: "bottom-right",
+          duration: 3000,
+        });
+        
+        // Refresh the interviewers list
+        const refreshResponse = await fetch('/api/get-interviewers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: '' })
+        });
+        
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          setInterviewers(data);
+        }
+      }
+    } catch (error: any) {
+      console.error("Error creating interviewers:", error);
+      toast.error(error.response?.data?.error || "Failed to create interviewers. Please try again.", {
+        position: "bottom-right",
+        duration: 5000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

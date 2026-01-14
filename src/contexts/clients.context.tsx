@@ -3,7 +3,6 @@
 import React, { useState, useContext, ReactNode, useEffect } from "react";
 import { User } from "@/types/user";
 import { useClerk, useOrganization } from "@clerk/nextjs";
-import { ClientService } from "@/services/clients.service";
 
 interface ClientContextProps {
   client?: User;
@@ -27,12 +26,20 @@ export function ClientProvider({ children }: ClientProviderProps) {
   const fetchClient = async () => {
     try {
       setClientLoading(true);
-      const response = await ClientService.getClientById(
-        user?.id as string,
-        user?.emailAddresses[0]?.emailAddress as string,
-        organization?.id as string,
-      );
-      setClient(response);
+      const response = await fetch('/api/get-client', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user?.id,
+          email: user?.emailAddresses[0]?.emailAddress,
+          organizationId: organization?.id
+        })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setClient(data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -42,10 +49,14 @@ export function ClientProvider({ children }: ClientProviderProps) {
   const fetchOrganization = async () => {
     try {
       setClientLoading(true);
-      const response = await ClientService.getOrganizationById(
-        organization?.id as string,
-        organization?.name as string,
-      );
+      await fetch('/api/get-organization', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          organizationId: organization?.id,
+          organizationName: organization?.name
+        })
+      });
     } catch (error) {
       console.error(error);
     }

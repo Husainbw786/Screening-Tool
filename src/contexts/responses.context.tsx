@@ -1,16 +1,15 @@
 "use client";
 
-import { ResponseService } from "@/services/responses.service";
 import React, { useContext } from "react";
 
 interface Response {
-  createResponse: (payload: any) => void;
-  saveResponse: (payload: any, call_id: string) => void;
+  createResponse: (payload: any) => Promise<any>;
+  saveResponse: (payload: any, call_id: string) => Promise<void>;
 }
 
 export const ResponseContext = React.createContext<Response>({
-  createResponse: () => {},
-  saveResponse: () => {},
+  createResponse: async () => {},
+  saveResponse: async () => {},
 });
 
 interface ResponseProviderProps {
@@ -19,13 +18,25 @@ interface ResponseProviderProps {
 
 export function ResponseProvider({ children }: ResponseProviderProps) {
   const createResponse = async (payload: any) => {
-    const data = await ResponseService.createResponse({ ...payload });
-
-    return data;
+    const response = await fetch('/api/create-response', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ payload })
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      return data.id;
+    }
+    return null;
   };
 
   const saveResponse = async (payload: any, call_id: string) => {
-    await ResponseService.saveResponse({ ...payload }, call_id);
+    await fetch('/api/save-response', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ payload, callId: call_id })
+    });
   };
 
   return (

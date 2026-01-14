@@ -5,10 +5,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Copy, ArrowUpRight } from "lucide-react";
 import { CopyCheck } from "lucide-react";
-import { ResponseService } from "@/services/responses.service";
 import axios from "axios";
 import MiniLoader from "@/components/loaders/mini-loader/miniLoader";
-import { InterviewerService } from "@/services/interviewers.service";
 
 interface Props {
   name: string | null;
@@ -28,9 +26,16 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
 
   useEffect(() => {
     const fetchInterviewer = async () => {
-      const interviewer =
-        await InterviewerService.getInterviewer(interviewerId);
-      setImg(interviewer.image);
+      const response = await fetch('/api/get-interviewer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ interviewerId: interviewerId.toString() })
+      });
+      
+      if (response.ok) {
+        const interviewer = await response.json();
+        setImg(interviewer.image);
+      }
     };
     fetchInterviewer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,29 +44,37 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
   useEffect(() => {
     const fetchResponses = async () => {
       try {
-        const responses = await ResponseService.getAllResponses(id);
-        setResponseCount(responses.length);
-        if (responses.length > 0) {
-          setIsFetching(true);
-          for (const response of responses) {
-            if (!response.is_analysed) {
-              try {
-                const result = await axios.post("/api/get-call", {
-                  id: response.call_id,
-                });
+        const response = await fetch('/api/get-responses', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ interviewId: id })
+        });
+        
+        if (response.ok) {
+          const responses = await response.json();
+          setResponseCount(responses.length);
+          if (responses.length > 0) {
+            setIsFetching(true);
+            for (const response of responses) {
+              if (!response.is_analysed) {
+                try {
+                  const result = await axios.post("/api/get-call", {
+                    id: response.call_id,
+                  });
 
-                if (result.status !== 200) {
-                  throw new Error(`HTTP error! status: ${result.status}`);
+                  if (result.status !== 200) {
+                    throw new Error(`HTTP error! status: ${result.status}`);
+                  }
+                } catch (error) {
+                  console.error(
+                    `Failed to call api/get-call for response id ${response.call_id}:`,
+                    error,
+                  );
                 }
-              } catch (error) {
-                console.error(
-                  `Failed to call api/get-call for response id ${response.call_id}:`,
-                  error,
-                );
               }
             }
+            setIsFetching(false);
           }
-          setIsFetching(false);
         }
       } catch (error) {
         console.error(error);

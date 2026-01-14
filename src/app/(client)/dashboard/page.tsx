@@ -5,7 +5,6 @@ import { useOrganization, useUser } from "@clerk/nextjs";
 import InterviewCard from "@/components/dashboard/interview/interviewCard";
 import CreateInterviewCard from "@/components/dashboard/interview/createInterviewCard";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { ClientService } from "@/services/clients.service";
 import { useInterviews } from "@/contexts/interviews.context";
 import { Plus } from "lucide-react";
 
@@ -41,15 +40,23 @@ function Interviews() {
     const fetchClientData = async () => {
       try {
         if (user?.id) {
-          const data = await ClientService.getClientById(
-            user.id,
-            user?.emailAddresses?.[0]?.emailAddress,
-            organization?.id ?? null
-          );
-          if (data) {
-            setUserOrganizationId(data.organization_id);
-            setClientData(data);
-            console.log("Fetched user role from Clerk:", userRole);
+          const response = await fetch('/api/get-client', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: user.id,
+              email: user?.emailAddresses?.[0]?.emailAddress,
+              organizationId: organization?.id ?? null
+            })
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data) {
+              setUserOrganizationId(data.organization_id);
+              setClientData(data);
+              console.log("Fetched user role from Clerk:", userRole);
+            }
           }
         }
       } catch (error) {

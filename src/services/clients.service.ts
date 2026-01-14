@@ -1,19 +1,23 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-
-const supabase = createClientComponentClient();
+import dbConnect from "../lib/mongodb";
+import Organization from "../models/Organization";
+import User from "../models/User";
+import mongoose from "mongoose";
 
 const updateOrganization = async (payload: any, id: string) => {
-  const { error, data } = await supabase
-    .from("organization")
-    .update({ ...payload })
-    .eq("id", id);
-  if (error) {
+  try {
+    await dbConnect();
+    
+    const data = await Organization.findByIdAndUpdate(
+      id,
+      { ...payload },
+      { new: true }
+    );
+    
+    return data;
+  } catch (error) {
     console.log(error);
-
-    return [];
+    return null;
   }
-
-  return data;
 };
 
 const getClientById = async (
@@ -22,45 +26,41 @@ const getClientById = async (
   organization_id?: string | null,
 ) => {
   try {
-    const { data, error } = await supabase
-      .from("user")
-      .select(`*`)
-      .filter("id", "eq", id);
+    await dbConnect();
+    
+    let data = await User.findById(id);
 
-    if (!data || (data.length === 0 && email)) {
-      const { error, data } = await supabase
-        .from("user")
-        .insert({ id: id, email: email, organization_id: organization_id });
-
-      if (error) {
-        console.log(error);
-
-        return [];
-      }
-
-      return data ? data[0] : null;
+    if (!data && email) {
+      // Create new user if doesn't exist
+      const newUser = await User.create({
+        _id: id,
+        email: email,
+        organization_id: organization_id ? new mongoose.Types.ObjectId(organization_id) : undefined,
+      });
+      
+      return newUser;
     }
 
-    if (data[0].organization_id !== organization_id) {
-      const { error, data } = await supabase
-        .from("user")
-        .update({ organization_id: organization_id })
-        .eq("id", id);
-
-      if (error) {
-        console.log(error);
-
-        return [];
-      }
-
-      return data ? data[0] : null;
+    if (data && organization_id && data.organization_id?.toString() !== organization_id) {
+      // Update organization_id if different (only if organization_id is provided)
+      data = await User.findByIdAndUpdate(
+        id,
+        { organization_id: new mongoose.Types.ObjectId(organization_id) },
+        { new: true }
+      );
+    } else if (data && !organization_id && data.organization_id) {
+      // Clear organization_id if null is passed
+      data = await User.findByIdAndUpdate(
+        id,
+        { organization_id: null },
+        { new: true }
+      );
     }
 
-    return data ? data[0] : null;
+    return data;
   } catch (error) {
     console.log(error);
-
-    return [];
+    return null;
   }
 };
 
@@ -69,45 +69,33 @@ const getOrganizationById = async (
   organization_name?: string,
 ) => {
   try {
-    const { data, error } = await supabase
-      .from("organization")
-      .select(`*`)
-      .filter("id", "eq", organization_id);
+    await dbConnect();
+    
+    let data = await Organization.findById(organization_id);
 
-    if (!data || data.length === 0) {
-      const { error, data } = await supabase
-        .from("organization")
-        .insert({ id: organization_id, name: organization_name });
-
-      if (error) {
-        console.log(error);
-
-        return [];
-      }
-
-      return data ? data[0] : null;
+    if (!data && organization_id) {
+      // Create new organization if doesn't exist
+      const newOrg = await Organization.create({
+        _id: new mongoose.Types.ObjectId(organization_id),
+        name: organization_name,
+      });
+      
+      return newOrg;
     }
 
-    if (organization_name && data[0].name !== organization_name) {
-      const { error, data } = await supabase
-        .from("organization")
-        .update({ name: organization_name })
-        .eq("id", organization_id);
-
-      if (error) {
-        console.log(error);
-
-        return [];
-      }
-
-      return data ? data[0] : null;
+    if (data && organization_name && data.name !== organization_name) {
+      // Update name if different
+      data = await Organization.findByIdAndUpdate(
+        organization_id,
+        { name: organization_name },
+        { new: true }
+      );
     }
 
-    return data ? data[0] : null;
+    return data;
   } catch (error) {
     console.log(error);
-
-    return [];
+    return null;
   }
 };
 

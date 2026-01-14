@@ -2,7 +2,6 @@
 
 import React, { useState, useContext, ReactNode, useEffect } from "react";
 import { Interview } from "@/types/interview";
-import { InterviewService } from "@/services/interviews.service";
 import { useClerk, useOrganization } from "@clerk/nextjs";
 
 interface InterviewContextProps {
@@ -36,22 +35,37 @@ export function InterviewProvider({ children }: InterviewProviderProps) {
   const fetchInterviews = async () => {
     try {
       setInterviewsLoading(true);
-      const response = await InterviewService.getAllInterviews(
-        user?.id as string,
-        organization?.id as string,
-      );
+      const response = await fetch('/api/get-interviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user?.id,
+          organizationId: organization?.id
+        })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setInterviews(data);
+      }
       setInterviewsLoading(false);
-      setInterviews(response);
     } catch (error) {
       console.error(error);
+      setInterviewsLoading(false);
     }
-    setInterviewsLoading(false);
   };
 
   const getInterviewById = async (interviewId: string) => {
-    const response = await InterviewService.getInterviewById(interviewId);
-
-    return response;
+    const response = await fetch('/api/get-interview-by-id', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ interviewId })
+    });
+    
+    if (response.ok) {
+      return await response.json();
+    }
+    return null;
   };
 
   useEffect(() => {

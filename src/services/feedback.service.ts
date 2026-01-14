@@ -1,20 +1,25 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import dbConnect from "../lib/mongodb";
+import Feedback from "../models/Feedback";
+import mongoose from "mongoose";
 import { FeedbackData } from "@/types/response";
 
-const supabase = createClientComponentClient();
-
 const submitFeedback = async (feedbackData: FeedbackData) => {
-  const { error, data } = await supabase
-    .from("feedback")
-    .insert(feedbackData)
-    .select();
-
-  if (error) {
+  try {
+    await dbConnect();
+    
+    // Convert interview_id to ObjectId if it's a string
+    const payload: any = { ...feedbackData };
+    if (payload.interview_id && typeof payload.interview_id === 'string') {
+      payload.interview_id = new mongoose.Types.ObjectId(payload.interview_id);
+    }
+    
+    const data = await Feedback.create(payload);
+    
+    return data;
+  } catch (error) {
     console.error("Error submitting feedback:", error);
     throw error;
   }
-
-  return data;
 };
 
 export const FeedbackService = {

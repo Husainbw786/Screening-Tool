@@ -165,7 +165,7 @@ function DetailsPopup({
               {interviewers.map((item, key) => (
                 <div
                   className=" p-0 inline-block cursor-pointer ml-1 mr-5 rounded-xl shrink-0 overflow-hidden"
-                  key={item.id}
+                  key={item.id.toString()}
                 >
                   <button
                     className="absolute ml-9"
@@ -179,7 +179,7 @@ function DetailsPopup({
                   </button>
                   <div
                     className={`w-[96px] overflow-hidden rounded-full ${
-                      selectedInterviewer === item.id
+                      String(selectedInterviewer) === String(item.id)
                         ? "border-4 border-green-600"
                         : ""
                     }`}
