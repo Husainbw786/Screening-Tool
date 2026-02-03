@@ -62,9 +62,9 @@ export function UploadCardBase({
 
       <div className="flex flex-col items-center gap-4 mt-4">
         <button
-          onClick={onButtonClick}
           disabled={isBusy || disabled}
           className="px-[12px] py-2 m-4 bg-white border border-gray-300 rounded-lg text-xs font-medium hover:bg-gray-50 transition flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={onButtonClick}
         >
           {isBusy ? (
             <>

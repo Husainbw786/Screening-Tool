@@ -62,19 +62,19 @@ export function CandidateCard({
           {" "}
           <div className="flex items-center justify-between gap-2">
             <h3
-              onClick={onClick}
               className="text-base text-gray-900 cursor-pointer truncate font-medium hover:text-blue-600 transition-colors"
+              onClick={onClick}
             >
               {candidate.name || "Unknown Candidate"}
             </h3>
 
             {candidate.score !== undefined && (
               <span
+                className="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded cursor-pointer whitespace-nowrap flex-shrink-0"
                 onClick={(e) => {
                   e.stopPropagation();
                   window.open(candidate.view_url, "_blank");
                 }}
-                className="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded cursor-pointer whitespace-nowrap flex-shrink-0"
               >
                 {Math.floor(candidate.score * 100)}% Match
               </span>
@@ -177,11 +177,11 @@ export function CandidateCard({
 
           {skills.length > SKILL_LIMIT && (
             <button
+              className="px-3 py-1 bg-slate-100 text-slate-700 hover:text-slate-800 hover:bg-slate-100 text-xs rounded font-medium transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsExpanded(!isExpanded);
               }}
-              className="px-3 py-1 bg-slate-100 text-slate-700 hover:text-slate-800 hover:bg-slate-100 text-xs rounded font-medium transition-colors"
             >
               {isExpanded ? "Show less" : `+${remainingCount} more`}
             </button>
@@ -192,6 +192,12 @@ export function CandidateCard({
       <div className="flex gap-2 mt-auto">
         <button
           disabled={!candidate?.email}
+          className={`flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg text-xs flex items-center justify-center gap-2 transition
+            ${
+              !candidate?.email
+                ? "opacity-50 cursor-not-allowed pointer-events-none"
+                : "hover:bg-gray-50 active:bg-gray-100"
+            }`}
           onClick={(e) => {
             e.stopPropagation();
             candidate?.email &&
@@ -200,12 +206,6 @@ export function CandidateCard({
                 "_blank",
               );
           }}
-          className={`flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg text-xs flex items-center justify-center gap-2 transition
-            ${
-              !candidate?.email
-                ? "opacity-50 cursor-not-allowed pointer-events-none"
-                : "hover:bg-gray-50 active:bg-gray-100"
-            }`}
         >
           <svg
             className="w-4 h-4"
@@ -225,16 +225,16 @@ export function CandidateCard({
 
         <button
           disabled={!candidate?.linkedin}
-          onClick={(e) => {
-            e.stopPropagation();
-            candidate?.linkedin && window.open(candidate.linkedin, "_blank");
-          }}
           className={`flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg text-xs flex items-center justify-center gap-2 transition
             ${
               !candidate?.linkedin
                 ? "opacity-50 cursor-not-allowed pointer-events-none"
                 : "hover:bg-gray-50 active:bg-gray-100"
             }`}
+          onClick={(e) => {
+            e.stopPropagation();
+            candidate?.linkedin && window.open(candidate.linkedin, "_blank");
+          }}
         >
           <svg
             className="w-4 h-4"

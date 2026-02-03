@@ -51,8 +51,8 @@ export default function ResultsRoute() {
       <div className="flex h-[50vh] w-full flex-col items-center justify-center gap-4">
         <p className="text-gray-500">No results found.</p>
         <button
-          onClick={() => router.push("/staffing/jd")}
           className="text-sm text-blue-600 hover:underline"
+          onClick={() => router.push("/staffing/jd")}
         >
           Upload a Job Description
         </button>

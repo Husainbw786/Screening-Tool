@@ -20,8 +20,8 @@ export default function CandidateDetailRoute() {
           Candidate not found
         </h2>
         <button
-          onClick={() => router.push("/staffing/jd")}
           className="mt-4 text-blue-600 hover:underline"
+          onClick={() => router.push("/staffing/jd")}
         >
           Return to search
         </button>

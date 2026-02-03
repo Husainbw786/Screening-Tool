@@ -25,7 +25,7 @@ export function ResultsPage({
   const [locationFilter, setLocationFilter] = useState("all");
 
   const filteredCandidates = useMemo(() => {
-    if (!data?.candidates) return [];
+    if (!data?.candidates) {return [];}
 
     return data.candidates.filter((candidate: Candidate) => {
       const searchLower = searchQuery.toLowerCase();
@@ -36,27 +36,27 @@ export function ResultsPage({
 
       const score = (candidate.score || 0) * 100;
       let matchesMatchScore = true;
-      if (matchScoreFilter === "95+") matchesMatchScore = score >= 95;
-      else if (matchScoreFilter === "90+") matchesMatchScore = score >= 90;
-      else if (matchScoreFilter === "85+") matchesMatchScore = score >= 85;
+      if (matchScoreFilter === "95+") {matchesMatchScore = score >= 95;}
+      else if (matchScoreFilter === "90+") {matchesMatchScore = score >= 90;}
+      else if (matchScoreFilter === "85+") {matchesMatchScore = score >= 85;}
 
       const exp = candidate.total_experience || 0;
       let matchesExperience = true;
-      if (experienceFilter === "5+") matchesExperience = exp >= 5;
-      else if (experienceFilter === "7+") matchesExperience = exp >= 7;
-      else if (experienceFilter === "10+") matchesExperience = exp >= 10;
+      if (experienceFilter === "5+") {matchesExperience = exp >= 5;}
+      else if (experienceFilter === "7+") {matchesExperience = exp >= 7;}
+      else if (experienceFilter === "10+") {matchesExperience = exp >= 10;}
 
       if (locationFilter === "all")
-        return matchesSearch && matchesMatchScore && matchesExperience;
+        {return matchesSearch && matchesMatchScore && matchesExperience;}
 
       const loc = candidate.location?.toLowerCase() || "";
       let matchesLocation = false;
       if (locationFilter === "sf")
-        matchesLocation = loc.includes("san francisco");
+        {matchesLocation = loc.includes("san francisco");}
       else if (locationFilter === "ny")
-        matchesLocation = loc.includes("new york");
+        {matchesLocation = loc.includes("new york");}
       else if (locationFilter === "remote")
-        matchesLocation = loc.includes("remote");
+        {matchesLocation = loc.includes("remote");}
 
       return (
         matchesSearch &&
@@ -79,8 +79,8 @@ export function ResultsPage({
     <main className="flex-1 px-6 py-6 gap-2 flex overflow-auto">
       <div className="w-full">
         <button
-          onClick={onGoBack}
           className="self-start px-4 py-2 mb-4 bg-white border border-gray-300 rounded-lg text-xs font-medium hover:bg-gray-50 transition justify-center gap-2"
+          onClick={onGoBack}
         >
           ← Go back
         </button>
@@ -106,9 +106,9 @@ export function ResultsPage({
                 <input
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search candidates"
                   className="w-full px-4 py-2 pl-10 bg-white border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <svg
                   className="absolute left-3 top-2.5 w-4 h-4 text-gray-400"
@@ -132,8 +132,8 @@ export function ResultsPage({
               </label>
               <select
                 value={matchScoreFilter}
-                onChange={(e) => setMatchScoreFilter(e.target.value)}
                 className="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onChange={(e) => setMatchScoreFilter(e.target.value)}
               >
                 <option value="all">All match score</option>
                 <option value="95+">95%+</option>
@@ -148,8 +148,8 @@ export function ResultsPage({
               </label>
               <select
                 value={experienceFilter}
-                onChange={(e) => setExperienceFilter(e.target.value)}
                 className="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onChange={(e) => setExperienceFilter(e.target.value)}
               >
                 <option value="all">All experience</option>
                 <option value="5+">5+ years</option>
@@ -164,8 +164,8 @@ export function ResultsPage({
               </label>
               <select
                 value={locationFilter}
-                onChange={(e) => setLocationFilter(e.target.value)}
                 className="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onChange={(e) => setLocationFilter(e.target.value)}
               >
                 <option value="all">All location</option>
                 <option value="sf">San Francisco, CA</option>

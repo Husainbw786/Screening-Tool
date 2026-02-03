@@ -30,7 +30,8 @@ export function JobDescriptionPage({
   const handleJDChange = (e: string) => {
     if (e.length > 5000) {
       console.log("JD limit exceeded");
-      return;
+      
+return;
     }
     setJobDescription(e);
   };
@@ -46,7 +47,8 @@ export function JobDescriptionPage({
 
       if (jobDescription.length < 10 || jobDescription.length > 5000) {
         setErrorMsg("Job description must be between 10 and 5000 characters.");
-        return;
+        
+return;
       }
 
       const endpoint =
@@ -94,7 +96,8 @@ export function JobDescriptionPage({
   const handleLinkedInClick = () => {
     if (!FEATURE_FLAG_LINKEDIN_ENABLED) {
       setErrorMsg("LinkedIn integration is currently under maintenance");
-      return;
+      
+return;
     }
     fetchCandidates("linkedin");
   };
@@ -103,8 +106,8 @@ export function JobDescriptionPage({
     <main className="flex-1 items-center justify-center flex flex-col px-4 py-6">
       <div className="w-full max-w-[827px] flex-1 items-center justify-center flex flex-col gap-4">
         <button
-          onClick={onGoBack}
           className="self-start px-4 py-2 bg-white border border-gray-300 rounded-lg text-xs font-medium hover:bg-gray-50 transition justify-center gap-2"
+          onClick={onGoBack}
         >
           ← Go back
         </button>
@@ -124,9 +127,9 @@ export function JobDescriptionPage({
           <div className="relative w-full">
             <textarea
               value={jobDescription}
-              onChange={(e) => handleJDChange(e.target.value)}
               placeholder="Enter job description"
               className={`${figtree.className} w-full h-64 p-4 pb-10 text-slate-600 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none`}
+              onChange={(e) => handleJDChange(e.target.value)}
             />
 
             <div className="absolute bottom-2 right-0.5 pointer-events-none z-10">
@@ -142,9 +145,9 @@ export function JobDescriptionPage({
 
           <div className="flex justify-center gap-4 mt-4">
             <button
-              onClick={() => fetchCandidates("database")}
               disabled={loadingSource !== null}
               className="px-4 py-2 bg-black text-white text-sm rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              onClick={() => fetchCandidates("database")}
             >
               {loadingSource === "database" ? (
                 <>
@@ -172,9 +175,9 @@ export function JobDescriptionPage({
             </button>
 
             <button
-              onClick={handleLinkedInClick}
               disabled={loadingSource !== null}
               className="px-4 py-2 border border-gray-300 text-sm rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              onClick={handleLinkedInClick}
             >
               {loadingSource === "linkedin" ? (
                 <>
