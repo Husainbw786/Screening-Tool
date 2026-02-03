@@ -26,7 +26,8 @@ function validateFile(file: File): string | null {
   if (!ALLOWED_FILE_TYPES.includes(file.type)) {
     return "Only PDF and DOCX files are allowed";
   }
-  return null;
+  
+return null;
 }
 
 async function uploadResumeToBackend(file: File) {
@@ -64,7 +65,8 @@ export function ResumeUploadCard(props: ResumeUploadCardProps) {
   const onButtonClick = (): void => {
     if (!FEATURE_FLAG_UPLOAD_ENABLED) {
       setErrorMsg("Feature currently under maintenance");
-      return;
+      
+return;
     }
     fileInputRef.current?.click();
   };
@@ -73,20 +75,22 @@ export function ResumeUploadCard(props: ResumeUploadCardProps) {
     if (!FEATURE_FLAG_UPLOAD_ENABLED) {
       setErrorMsg("Feature currently under maintenance");
       event.target.value = "";
-      return;
+      
+return;
     }
 
     const file = event.target.files?.[0];
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    if (!file) return;
+    if (!file) {return;}
 
     const validationError = validateFile(file);
     if (validationError) {
       setErrorMsg(validationError);
       event.target.value = "";
-      return;
+      
+return;
     }
 
     setIsUploading(true);
@@ -120,9 +124,9 @@ export function ResumeUploadCard(props: ResumeUploadCardProps) {
         ref={fileInputRef}
         type="file"
         accept=".pdf,.doc,.docx"
-        onChange={onFileChange}
         className="hidden"
         disabled={isUploading || !FEATURE_FLAG_UPLOAD_ENABLED}
+        onChange={onFileChange}
       />
 
       <UploadCardBase
@@ -132,10 +136,10 @@ export function ResumeUploadCard(props: ResumeUploadCardProps) {
         buttonText={props.buttonText}
         infoTitle={props.infoTitle}
         items={props.items}
-        onButtonClick={onButtonClick}
         isBusy={isUploading}
         statusNode={statusNode}
         disabled={isUploading}
+        onButtonClick={onButtonClick}
       />
     </>
   );

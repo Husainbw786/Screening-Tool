@@ -12,8 +12,8 @@ export default function StaffingHomePage() {
 
   return (
     <HomeComponent
-      onShowJD={handleShowJD}
       showToast={(msg: any) => console.log(msg)}
+      onShowJD={handleShowJD}
     />
   );
 }

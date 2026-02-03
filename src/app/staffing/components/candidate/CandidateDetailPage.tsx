@@ -5,7 +5,7 @@ export function CandidateDetailPage({
   candidate: any;
   onGoBack: () => void;
 }) {
-  if (!candidate) return null;
+  if (!candidate) {return null;}
 
   const skills = candidate.skills || [];
   const conversation = candidate.conversation || [];
@@ -14,8 +14,8 @@ export function CandidateDetailPage({
     <main className="flex-1 px-6 py-6 gap-2 flex overflow-auto">
       <div className="w-full">
         <button
-          onClick={onGoBack}
           className="self-start px-4 py-2 mb-4 bg-white border border-gray-300 rounded-lg text-xs font-medium hover:bg-gray-50 transition justify-center gap-2"
+          onClick={onGoBack}
         >
           ← Go back
         </button>

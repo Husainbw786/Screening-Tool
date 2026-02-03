@@ -25,9 +25,9 @@ export function JDUploadCard({
       buttonText={buttonText}
       infoTitle={infoTitle}
       items={items}
-      onButtonClick={onSelectJD}
       isBusy={false}
       statusNode={null}
+      onButtonClick={onSelectJD}
     />
   );
 }

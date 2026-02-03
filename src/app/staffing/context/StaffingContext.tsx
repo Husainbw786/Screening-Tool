@@ -70,5 +70,6 @@ export function useStaffing() {
   if (!context) {
     throw new Error("useStaffing must be used within a StaffingProvider");
   }
-  return context;
+  
+return context;
 }
